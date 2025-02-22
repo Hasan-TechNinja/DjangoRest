@@ -9,7 +9,7 @@ from rest_framework import status
 # Create your views here.
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST',])
 def StudentView(request):
     if request.method == 'GET':
         student = Student.objects.all()
@@ -23,3 +23,34 @@ def StudentView(request):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors)
+        
+
+    elif request.method == 'PUT':
+        student = Student.objects.get(pk = pk)
+        serializer = StudentSerializer(student ,data = request.data,)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+@api_view(['PUT', 'GET'])
+def StudentDetails(request, pk):
+    try:
+        student = Student.objects.get(pk = pk)
+    except Student.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        student = Student.objects.get(pk = pk)
+        serializer = StudentSerializer(student, many = False)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':    
+        serializer = StudentSerializer(student, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
