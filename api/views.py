@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from students.models import Student
-from . serializers import StudentSerializer
+from teacher.models import Teacher
+from . serializers import StudentSerializer, TeacherSerializer
+
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 
 # Create your views here.
 
@@ -52,5 +55,20 @@ def StudentDetails(request, pk):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TeacherView(APIView):
+    def get(self, request):
+        teacher = Teacher.objects.all()
+        serializer = TeacherSerializer(teacher, many = True)
+        return Response(serializer.data, status=status.HTTP_302_FOUND)
+
+    def post(self, request):
+        serializer = TeacherSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
