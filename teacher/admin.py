@@ -5,6 +5,6 @@ from . models import Teacher
 
 class TeacherAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'teacher_id', 'name', 'location', 'joinDate',
+        'id', 'teacher_id', 'name', 'location', 'joinDate', 'status'
     )
 admin.site.register(Teacher, TeacherAdmin)

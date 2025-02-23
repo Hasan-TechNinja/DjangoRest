@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from students.models import Student
 from teacher.models import Teacher
-from . serializers import StudentSerializer, TeacherSerializer
 
+from . serializers import StudentSerializer, TeacherSerializer
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -72,3 +72,36 @@ class TeacherView(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def put(self, request, pk):
+        teacher = Teacher.objects.get(id=pk)
+        serializer = TeacherSerializer(teacher, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class TeacherDetails(APIView):
+    def get(self, request, pk):
+        try: 
+            teacher = Teacher.objects.get(pk = pk)
+        except Teacher.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = TeacherSerializer(teacher, many=False)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        teacher = Teacher.objects.get(pk= pk)
+        serializer = TeacherSerializer(teacher, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request, pk):
+        teacher = Teacher.objects.get(pk=pk)
+        teacher.delete()
+        return Response(status=status.HTTP_404_NOT_FOUND)
