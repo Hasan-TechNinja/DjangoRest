@@ -106,8 +106,8 @@ class TeacherDetails(APIView):
         teacher = Teacher.objects.get(pk=pk)
         teacher.delete()
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
-
+'''
+#Mixin view with Create, Read, Update and Delete operation
 class EmployeView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -131,3 +131,15 @@ class EmployeDetailsView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,mixi
     
     def delete(self, request, pk):
         return self.destroy(request, pk)
+'''
+
+# class EmployeView(generics.ListAPIView, generics.CreateAPIView):
+class EmployeView(generics.ListCreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+
+class EmployeDetailsView(generics.RetrieveAPIView,):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    lookup_field = 'pk'
