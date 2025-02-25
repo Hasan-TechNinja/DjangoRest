@@ -28,15 +28,6 @@ def StudentView(request):
         else:
             return Response(serializer.errors)
         
-
-    # elif request.method == 'PUT':
-    #     student = Student.objects.get(pk = pk)
-    #     serializer = StudentSerializer(student ,data = request.data,)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 @api_view(['PUT', 'GET'])
@@ -133,13 +124,30 @@ class EmployeDetailsView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,mixi
         return self.destroy(request, pk)
 '''
 
-# class EmployeView(generics.ListAPIView, generics.CreateAPIView):
-class EmployeView(generics.ListCreateAPIView):
+'''
+
+#Generics API View 
+
+class EmployeView(generics.ListCreateAPIView, generics.CreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
 
+#Generics API Details view
 
-class EmployeDetailsView(generics.RetrieveAPIView,):
+class EmployeDetailsView(generics.CreateAPIView, generics.UpdateAPIView, generics.DestroyAPIView, generics.RetrieveAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     lookup_field = 'pk'
+
+'''
+
+#Generics API View
+class EmployeView(generics.CreateAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+    
+
+#Generics Details API View
+class EmployeDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
