@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from students.models import Student
 from teacher.models import Teacher
 from Employee.models import Employee
@@ -7,8 +7,9 @@ from . serializers import StudentSerializer, TeacherSerializer, EmployeeSerializ
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status, mixins, generics
+from rest_framework import status, mixins, generics, viewsets
 from rest_framework.views import APIView
+
 
 # Create your views here.
 
@@ -151,3 +152,38 @@ class EmployeView(generics.CreateAPIView, generics.ListAPIView):
 class EmployeDetailsView(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+
+class EmployeViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Employee.objects.all()
+        serializer = EmployeeSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = EmployeeSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def retrieve(self, request, pk = None):
+        queryset = get_object_or_404(Employee, pk = pk)
+        serializer = EmployeeSerializer(queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        
+    def update(self, request, pk=None):
+        queryset = get_object_or_404(Employee, pk = pk)
+        serializer = EmployeeSerializer(queryset, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request, pk = None):
+        queryset = Employee.objects.get(pk = pk)
+        queryset.delete()
+        return Response(status=status.HTTP_404_NOT_FOUND)
