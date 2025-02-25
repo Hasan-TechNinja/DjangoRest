@@ -142,12 +142,12 @@ class EmployeDetailsView(generics.CreateAPIView, generics.UpdateAPIView, generic
 '''
 
 #Generics API View
-class EmployeView(generics.CreateAPIView):
+class EmployeView(generics.CreateAPIView, generics.ListAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-    
+
 
 #Generics Details API View
-class EmployeDetailsView(generics.RetrieveUpdateDestroyAPIView):
+class EmployeDetailsView(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
