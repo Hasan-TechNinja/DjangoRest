@@ -12,5 +12,8 @@ urlpatterns = [
     path('teaDet/<int:pk>', views.TeacherDetails.as_view(), name='teacherDetails'),
     path('employess/', views.EmployeView.as_view(), name='employe'),
     path('empDets/<int:pk>', views.EmployeDetailsView.as_view(), name='employe'),
-    path('', include(router.urls ))
+    path('', include(router.urls )),
+
+    path('blog/', views.BlogView.as_view(), name='blog'),
+    path('comment/', views.CommentView.as_view(), name='comment'),
 ]

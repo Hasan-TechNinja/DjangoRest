@@ -10,6 +10,9 @@ from rest_framework.response import Response
 from rest_framework import status, mixins, generics, viewsets
 from rest_framework.views import APIView
 
+from blogs.models import Blog, Comment
+from blogs.serializers import BlogSerializer, CommentSerializer
+
 
 # Create your views here.
 
@@ -198,3 +201,16 @@ class EmployeViewSet(viewsets.ViewSet):
 class EmployeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+
+
+#Blog Start here
+
+class BlogView(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
+class CommentView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
