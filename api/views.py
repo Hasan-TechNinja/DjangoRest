@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from students.models import Student
 from teacher.models import Teacher
 from Employee.models import Employee
@@ -154,6 +154,8 @@ class EmployeDetailsView(generics.RetrieveUpdateDestroyAPIView, generics.CreateA
     serializer_class = EmployeeSerializer
 
 
+#View Set 
+'''
 class EmployeViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Employee.objects.all()
@@ -187,3 +189,12 @@ class EmployeViewSet(viewsets.ViewSet):
         queryset = Employee.objects.get(pk = pk)
         queryset.delete()
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+'''
+
+
+#Model ViewSet
+
+class EmployeViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
